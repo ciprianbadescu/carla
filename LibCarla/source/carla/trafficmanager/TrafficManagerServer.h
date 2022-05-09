@@ -43,17 +43,20 @@ public:
 
     uint16_t counter = 0;
     while(counter < MIN_TRY_COUNT) {
-      try {
+          #ifndef LIBCARLA_NO_EXCEPTIONS
 
+      try {
+        #endif
         /// Create server instance.
         server = new ::rpc::server(RPCPort);
+    #ifndef LIBCARLA_NO_EXCEPTIONS
 
       } catch(std::exception) {
         using namespace std::chrono_literals;
         /// Update port number and try again.
         std::this_thread::sleep_for(500ms);
       }
-
+#endif
       /// If server created.
       if(server != nullptr) {
         break;

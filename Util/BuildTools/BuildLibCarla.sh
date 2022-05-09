@@ -121,12 +121,12 @@ function build_libcarla {
     M_BUILD_FOLDER=${LIBCARLA_BUILD_SERVER_FOLDER}.$(echo "$2" | tr '[:upper:]' '[:lower:]')
     M_INSTALL_FOLDER=${LIBCARLA_INSTALL_SERVER_FOLDER}
   elif [ $1 == Client ] ; then
-    M_TOOLCHAIN=${LIBSTDCPP_TOOLCHAIN_FILE}
+    M_TOOLCHAIN=${LIBCPP_TOOLCHAIN_FILE}
     M_BUILD_FOLDER=${LIBCARLA_BUILD_CLIENT_FOLDER}.$(echo "$2" | tr '[:upper:]' '[:lower:]')
     M_INSTALL_FOLDER=${LIBCARLA_INSTALL_CLIENT_FOLDER}
   elif [ $1 == ClientRSS ] ; then
     BUILD_TYPE='Client'
-    M_TOOLCHAIN=${LIBSTDCPP_TOOLCHAIN_FILE}
+    M_TOOLCHAIN=${LIBCPP_TOOLCHAIN_FILE}
     M_BUILD_FOLDER=${LIBCARLA_BUILD_CLIENT_FOLDER}.rss.$(echo "$2" | tr '[:upper:]' '[:lower:]')
     M_INSTALL_FOLDER=${LIBCARLA_INSTALL_CLIENT_FOLDER}
     CMAKE_EXTRA_OPTIONS="${CMAKE_EXTRA_OPTIONS:+${CMAKE_EXTRA_OPTIONS} }-DBUILD_RSS_VARIANT=ON -DADRSS_INSTALL_DIR=${CARLA_BUILD_FOLDER}/ad-rss-4.4.3/install"
@@ -177,7 +177,7 @@ function build_libcarla {
 
   fi
 
-  ninja
+  ninja -v
 
   ninja install | grep -v "Up-to-date:"
 

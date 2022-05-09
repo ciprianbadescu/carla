@@ -149,7 +149,7 @@ for PY_VERSION in ${PY_VERSION_LIST[@]} ; do
     pushd ${BOOST_BASENAME}-source >/dev/null
 
     BOOST_TOOLSET="clang-8.0"
-    BOOST_CFLAGS="-fPIC -std=c++14 -DBOOST_ERROR_CODE_HEADER_ONLY"
+    BOOST_CFLAGS="-fPIC -std=c++14 -DBOOST_ERROR_CODE_HEADER_ONLY -std=c++14 -stdlib=libc++ -I${LLVM_INCLUDE} -Wl,-L${LLVM_LIBPATH}"
 
     py3="/usr/bin/env python${PY_VERSION}"
     py3_root=`${py3} -c "import sys; print(sys.prefix)"`
@@ -743,12 +743,10 @@ cat >${CMAKE_CONFIG_FILE}.gen <<EOL
 
 add_definitions(-DBOOST_ERROR_CODE_HEADER_ONLY)
 
-if (CMAKE_BUILD_TYPE STREQUAL "Server")
   add_definitions(-DASIO_NO_EXCEPTIONS)
   add_definitions(-DBOOST_NO_EXCEPTIONS)
   add_definitions(-DLIBCARLA_NO_EXCEPTIONS)
   add_definitions(-DPUGIXML_NO_EXCEPTIONS)
-endif ()
 
 # Uncomment to force support for an specific image format (require their
 # respective libraries installed).
@@ -770,10 +768,10 @@ if (CMAKE_BUILD_TYPE STREQUAL "Server")
   set(GTEST_LIB_PATH "${GTEST_LIBCXX_LIBPATH}")
 elseif (CMAKE_BUILD_TYPE STREQUAL "Client")
   # Here libraries linking libstdc++.
-  set(RPCLIB_INCLUDE_PATH "${RPCLIB_LIBSTDCXX_INCLUDE}")
-  set(RPCLIB_LIB_PATH "${RPCLIB_LIBSTDCXX_LIBPATH}")
-  set(GTEST_INCLUDE_PATH "${GTEST_LIBSTDCXX_INCLUDE}")
-  set(GTEST_LIB_PATH "${GTEST_LIBSTDCXX_LIBPATH}")
+  set(RPCLIB_INCLUDE_PATH "${RPCLIB_LIBCXX_INCLUDE}")
+  set(RPCLIB_LIB_PATH "${RPCLIB_LIBCXX_LIBPATH}")
+  set(GTEST_INCLUDE_PATH "${GTEST_LIBCXX_INCLUDE}")
+  set(GTEST_LIB_PATH "${GTEST_LIBCXX_LIBPATH}")
   set(BOOST_LIB_PATH "${BOOST_LIBPATH}")
   set(RECAST_INCLUDE_PATH "${RECAST_INCLUDE}")
   set(RECAST_LIB_PATH "${RECAST_LIBPATH}")

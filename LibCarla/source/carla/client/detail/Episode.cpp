@@ -43,11 +43,18 @@ using namespace std::chrono_literals;
       _token(info.token) {}
 
   Episode::~Episode() {
-    try {
+    #ifndef LIBCARLA_NO_EXCEPTIONS
+      try {
+#endif // LIBCARLA_NO_EXCEPTIONS
+
       _client.UnSubscribeFromStream(_token);
+      #ifndef LIBCARLA_NO_EXCEPTIONS
+
     } catch (const std::exception &e) {
       log_error("exception trying to disconnect from episode:", e.what());
     }
+    #endif // LIBCARLA_NO_EXCEPTIONS
+
   }
 
   void Episode::Listen() {

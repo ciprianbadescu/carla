@@ -57,11 +57,17 @@ namespace detail {
 
     template <typename ... Args>
     auto RawCall(const std::string &function, Args && ... args) {
+    #ifndef LIBCARLA_NO_EXCEPTIONS
       try {
+#endif // LIBCARLA_NO_EXCEPTIONS
         return rpc_client.call(function, std::forward<Args>(args) ...);
+           #ifndef LIBCARLA_NO_EXCEPTIONS
+
       } catch (const ::rpc::timeout &) {
         throw_exception(TimeoutException(endpoint, GetTimeout()));
       }
+      #endif // LIBCARLA_NO_EXCEPTIONS
+
     }
 
     template <typename T, typename ... Args>
@@ -348,12 +354,18 @@ namespace detail {
   }
 
   bool Client::DestroyActor(rpc::ActorId actor) {
-    try {
+    #ifndef LIBCARLA_NO_EXCEPTIONS
+      try {
+#endif // LIBCARLA_NO_EXCEPTIONS
       return _pimpl->CallAndWait<bool>("destroy_actor", actor);
+        #ifndef LIBCARLA_NO_EXCEPTIONS
+
     } catch (const std::exception &e) {
       log_error("failed to destroy actor", actor, ':', e.what());
       return false;
     }
+    #endif // LIBCARLA_NO_EXCEPTIONS
+
   }
 
   void Client::SetActorLocation(rpc::ActorId actor, const geom::Location &location) {

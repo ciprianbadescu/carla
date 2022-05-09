@@ -59,10 +59,15 @@ TEST(recurrent_shared_future, exception) {
     std::this_thread::sleep_for(10ms);
     future.SetException(std::runtime_error(message));
   });
+    #ifndef LIBCARLA_NO_EXCEPTIONS
 
   try {
+#endif
     future.WaitFor(1s);
+      #ifndef LIBCARLA_NO_EXCEPTIONS
+
   } catch (const std::exception &e) {
     ASSERT_STREQ(e.what(), message.c_str());
   }
+  #endif
 }

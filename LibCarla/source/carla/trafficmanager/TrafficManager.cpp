@@ -190,8 +190,10 @@ bool TrafficManager::CreateTrafficManagerClient(
       TrafficManagerRemote(serverTM, episode_proxy);
 
     /// Try to connect to remote TM server
-    try {
+        #ifndef LIBCARLA_NO_EXCEPTIONS
 
+    try {
+      #endif
       /// Check memory allocated or not
       if(tm_ptr != nullptr) {
 
@@ -210,6 +212,8 @@ bool TrafficManager::CreateTrafficManagerClient(
 
         result = true;
       }
+        #ifndef LIBCARLA_NO_EXCEPTIONS
+
     }
 
     /// If Connection error occurred
@@ -226,6 +230,7 @@ bool TrafficManager::CreateTrafficManagerClient(
             << std::endl;
       #endif
     }
+    #endif
 
   }
 

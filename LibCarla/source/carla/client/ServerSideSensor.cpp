@@ -22,11 +22,18 @@ namespace client {
           GetDisplayId());
     }
     if (IsListening() && GetEpisode().IsValid()) {
+      #ifndef LIBCARLA_NO_EXCEPTIONS
+
       try {
+        #endif // LIBCARLA_NO_EXCEPTIONS
         Stop();
+#ifndef LIBCARLA_NO_EXCEPTIONS
+
       } catch (const std::exception &e) {
         log_error("exception trying to stop sensor:", GetDisplayId(), ':', e.what());
       }
+      #endif // LIBCARLA_NO_EXCEPTIONS
+
     }
   }
 

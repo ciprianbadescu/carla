@@ -49,9 +49,9 @@ ENV UE4_ROOT /home/carla/UE4.26
 
 RUN git clone --depth 1 -b carla "https://${EPIC_USER}:${EPIC_PASS}@github.com/CarlaUnreal/UnrealEngine.git" ${UE4_ROOT}
 
-RUN cd $UE4_ROOT && \
-  ./Setup.sh && \
-  ./GenerateProjectFiles.sh && \
-  make
+WORKDIR $UE4_ROOT
+RUN ./Setup.sh
+RUN ./GenerateProjectFiles.sh
+RUN make
 
 WORKDIR /home/carla/

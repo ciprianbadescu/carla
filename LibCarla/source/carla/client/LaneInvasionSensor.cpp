@@ -151,18 +151,24 @@ namespace client {
     }
 
     auto episode = GetEpisode().Lock();
-    
+
     auto cb = std::make_shared<LaneInvasionCallback>(
         *vehicle,
         episode->GetCurrentMap(),
         std::move(callback));
 
     const size_t callback_id = episode->RegisterOnTickEvent([cb=std::move(cb)](const auto &snapshot) {
+            #ifndef LIBCARLA_NO_EXCEPTIONS
+
       try {
+        #endif // LIBCARLA_NO_EXCEPTIONS
         cb->Tick(snapshot);
+              #ifndef LIBCARLA_NO_EXCEPTIONS
+
       } catch (const std::exception &e) {
         log_error("LaneInvasionSensor:", e.what());
       }
+        #endif // LIBCARLA_NO_EXCEPTIONS
     });
 
     const size_t previous = _callback_id.exchange(callback_id);

@@ -33,7 +33,10 @@ void TrafficManagerRemote::Start() {
 
   std::thread _thread = std::thread([this] () {
     std::chrono::milliseconds wait_time(TM_TIMEOUT);
+        #ifndef LIBCARLA_NO_EXCEPTIONS
+
     try {
+#endif
       do {
         std::this_thread::sleep_for(wait_time);
 
@@ -41,6 +44,8 @@ void TrafficManagerRemote::Start() {
 
         /// Until connection active
       } while (_keep_alive);
+        #ifndef LIBCARLA_NO_EXCEPTIONS
+
     } catch (...) {
 
       std::string rhost("");
@@ -60,6 +65,7 @@ void TrafficManagerRemote::Start() {
         this->episodeProxyTM.Lock()->AddPendingException(errmsg);
       }
     }
+  #endif
     _keep_alive = false;
     _cv.notify_one();
   });

@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.5.1)
 project(libcarla-client)
 
+# Install libc++ shared libraries.
+file(GLOB LibCXX_Libraries "${LLVM_LIB_PATH}/libc++*")
+install(FILES ${LibCXX_Libraries} DESTINATION lib)
+
 # Enable/Install RSS VARIANT
 option (BUILD_RSS_VARIANT "Enables ad-rss-lib based RSS components" OFF)
 set(carla_target_postfix "")

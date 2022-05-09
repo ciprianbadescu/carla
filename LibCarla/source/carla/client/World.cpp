@@ -128,11 +128,17 @@ namespace client {
       const geom::Transform &transform,
       Actor *parent_actor,
       rpc::AttachmentType attachment_type) noexcept {
-    try {
+#ifndef LIBCARLA_NO_EXCEPTIONS
+      try {
+#endif // LIBCARLA_NO_EXCEPTIONS
       return SpawnActor(blueprint, transform, parent_actor, attachment_type);
+      #ifndef LIBCARLA_NO_EXCEPTIONS
+
     } catch (const std::exception &) {
       return nullptr;
     }
+    #endif // LIBCARLA_NO_EXCEPTIONS
+
   }
 
   WorldSnapshot World::WaitForTick(time_duration timeout) const {
